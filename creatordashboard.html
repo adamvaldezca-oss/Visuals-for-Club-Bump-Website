@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Dashboard | Club Bump</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --midnight-blue: #0a0e27;
+            --neon-violet: #bd00ff;
+            --ivory: #f5f5f0;
+            --night-black: #050505;
+            --club-red: #ff0040;
+            --green: #00ff88;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--night-black);
+            color: var(--ivory);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--midnight-blue);
+            padding: 2rem;
+            border-right: 1px solid rgba(189, 0, 255, 0.2);
+        }
+        
+        .sidebar-logo {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.8rem;
+            color: var(--neon-violet);
+            margin-bottom: 3rem;
+        }
+        
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+        
+        .nav-section h6 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(189, 0, 255, 0.1);
+            color: var(--neon-violet);
+        }
+        
+        /* Main Content */
+        .main {
+            padding: 2rem 3rem;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2.5rem;
+            color: var(--neon-violet);
+        }
+        
+        .tier-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .tier {
+            background: linear-gradient(135deg, var(--neon-violet), var(--club-red));
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .payout {
+            text-align: right;
+        }
+        
+        .payout-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--green);
+        }
+        
+        .payout-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--midnight-blue);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(189, 0, 255, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+        
+        .stat-trend {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .trend-up { color: var(--green); }
+        .trend-down { color: var(--club-red); }
+        
+        /* Quick Actions */
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .action-card {
+            background: var(--midnight-blue);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .action-card:hover {
+            border-color: var(--neon-violet);
+            transform: translateY(-3px);
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-desc {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        /* Live Events */
+        .section {
+            background: var(--midnight-blue);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section h3 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.5rem;
+        }
+        
+        .live-event {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--club-red);
+        }
+        
+        .live-event.upcoming {
+            border-left-color: var(--neon-violet);
+        }
+        
+        .event-info h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-meta {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .event-products {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .product-tag {
+            background: rgba(189, 0, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .btn-small {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-red {
+            background: var(--club-red);
+            color: var(--ivory);
+        }
+        
+        .btn-violet {
+            background: var(--neon-violet);
+            color: var(--ivory);
+        }
+        
+        /* Analytics Chart Placeholder */
+        .chart-container {
+            height: 300px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(189, 0, 255, 0.3), transparent);
+            clip-path: polygon(0% 100%, 10% 80%, 20% 85%, 30% 60%, 40% 70%, 50% 40%, 60% 50%, 70% 30%, 80% 45%, 90% 20%, 100% 35%, 100% 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">Club Bump</div>
+            
+            <div class="nav-section">
+                <h6>Main</h6>
+                <div class="nav-item active">
+                    <span>📊</span> Dashboard
+                </div>
+                <div class="nav-item">
+                    <span>🎥</span> Live Events
+                </div>
+                <div class="nav-item">
+                    <span>🔗</span> Affiliate Links
+                </div>
+                <div class="nav-item">
+                    <span>📦</span> Sample Boxes
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <h6>Performance</h6>
+                <div class="nav-item">
+                    <span>📈</span> Analytics
+                </div>
+                <div class="nav-item">
+                    <span>💰</span> Earnings
+                </div>
+                <div class="nav-item">
+                    <span>👥</span> Audience
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <h6>Account</h6>
+                <div class="nav-item">
+                    <span>⚙️</span> Settings
+                </div>
+                <div class="nav-item">
+                    <span>🆘</span> Support
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main">
+            <div class="header">
+                <div>
+                    <h1>Creator Command Center</h1>
+                    <div class="tier-badge">
+                        <span class="tier">🔮 ORACLE ELITE</span>
+                        <span style="opacity: 0.8;">20% Commission</span>
+                    </div>
+                </div>
+                <div class="payout">
+                    <div class="payout-amount">$4,280.00</div>
+                    <div class="payout-label">Available to Payout</div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">GMV Generated</div>
+                    <div class="stat-value">$21.4K</div>
+                    <div class="stat-trend trend-up">↑ 23% vs last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-trend trend-up">↑ 15% vs last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-value">4.2%</div>
+                    <div class="stat-trend trend-up">↑ 0.5% vs last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Live Viewers</div>
+                    <div class="stat-value">12.8K</div>
+                    <div class="stat-trend trend-down">↓ 5% vs last event</div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="actions">
+                <div class="action-card">
+                    <div class="action-icon">🎥</div>
+                    <div class="action-title">Go Live</div>
+                    <div class="action-desc">Start TikTok Live with products</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">🔗</div>
+                    <div class="action-title">Get Links</div>
+                    <div class="action-desc">Generate affiliate links</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">📦</div>
+                    <div class="action-title">Sample Box</div>
+                    <div class="action-desc">Request free products</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">🎨</div>
+                    <div class="action-title">AI Content</div>
+                    <div class="action-desc">Generate scripts & captions</div>
+                </div>
+            </div>
+            
+            <!-- Live Events -->
+            <div class="section">
+                <div class="section-header">
+                    <h3>Upcoming Live Events</h3>
+                    <button class="btn-small btn-violet">+ Schedule New</button>
+                </div>
+                
+                <div class="live-event">
+                    <div class="event-info">
+                        <h4>🔴 LIVE NOW: Midnight Caviar Rituals</h4>
+                        <div class="event-meta">Started 15 minutes ago • 1,247 viewers</div>
+                    </div>
+                    <div class="event-products">
+                        <span class="product-tag">Osetra Gold</span>
+                        <span class="product-tag">Pringles Pairing</span>
+                        <span class="product-tag">+3 more</span>
+                    </div>
+                    <button class="btn-small btn-red">Join Stream</button>
+                </div>
+                
+                <div class="live-event upcoming">
+                    <div class="event-info">
+                        <h4>F1 Afterparty Oracle</h4>
+                        <div class="event-meta">Tomorrow, 8:00 PM • Miami Grand Prix</div>
+                    </div>
+                    <div class="event-products">
+                        <span class="product-tag">Beluga Reserve</span>
+                        <span class="product-tag">Party Pack</span>
+                        <span class="product-tag">+5 more</span>
+                    </div>
+                    <button class="btn-small btn-violet">Prepare</button>
+                </div>
+            </div>
+            
+            <!-- Performance Chart -->
+            <div class="section">
+                <div class="section-header">
+                    <h3>Performance Overview</h3>
+                    <select style="background: var(--night-black); color: var(--ivory); border: 1px solid rgba(189,0,255,0.3); padding: 0.5rem; border-radius: 0.25rem;">
+                        <option>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                        <option>This Year</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-line"></div>
+                    <span style="opacity: 0.5;">Revenue Trend Visualization</span>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Bump | Luxury Gets Weird After Midnight</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --midnight-blue: #0a0e27;
+            --neon-violet: #bd00ff;
+            --ivory: #f5f5f0;
+            --night-black: #050505;
+            --club-red: #ff0040;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--night-black);
+            color: var(--ivory);
+            overflow-x: hidden;
+        }
+        
+        /* Age Gate Overlay */
+        .age-gate {
+            position: fixed;
+            inset: 0;
+            background: var(--night-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background-image: 
+                radial-gradient(circle at 20% 50%, var(--neon-violet) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--club-red) 0%, transparent 40%);
+        }
+        
+        .age-gate-content {
+            text-align: center;
+            padding: 3rem;
+            border: 2px solid var(--neon-violet);
+            border-radius: 1rem;
+            background: rgba(10, 14, 39, 0.9);
+            box-shadow: 0 0 100px rgba(189, 0, 255, 0.3);
+            max-width: 500px;
+        }
+        
+        .age-gate h1 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3.5rem;
+            color: var(--neon-violet);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .tagline {
+            font-size: 0.9rem;
+            color: var(--ivory);
+            opacity: 0.8;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        
+        .age-warning {
+            font-size: 2rem;
+            color: var(--club-red);
+            font-family: 'Permanent Marker', cursive;
+            margin: 2rem 0;
+        }
+        
+        .age-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+        
+        .btn-primary {
+            background: var(--neon-violet);
+            color: var(--ivory);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--club-red);
+            box-shadow: 0 0 30px rgba(255, 0, 64, 0.5);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--ivory);
+            padding: 1rem 2rem;
+            border: 1px solid rgba(245, 245, 240, 0.3);
+            border-radius: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(245, 245, 240, 0.1);
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--night-black), transparent);
+            z-index: 100;
+        }
+        
+        .logo {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2rem;
+            color: var(--neon-violet);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--ivory);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--neon-violet);
+        }
+        
+        .nav-cta {
+            background: var(--club-red);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: 
+                radial-gradient(ellipse at center, rgba(189, 0, 255, 0.15) 0%, transparent 70%),
+                var(--night-black);
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bd00ff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+        
+        .hero h2 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 6rem;
+            color: var(--ivory);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 50px rgba(189, 0, 255, 0.5);
+            line-height: 1;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--neon-violet);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+        
+        .hero-description {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .btn-large {
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--neon-violet);
+            color: var(--neon-violet);
+            padding: 1.25rem 3rem;
+            border-radius: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline:hover {
+            background: var(--neon-violet);
+            color: var(--ivory);
+        }
+        
+        /* Live Badge */
+        .live-badge {
+            position: absolute;
+            top: 120px;
+            right: 3rem;
+            background: var(--club-red);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 0, 64, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(255, 0, 64, 0); }
+        }
+        
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--ivory);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Product Showcase */
+        .products {
+            padding: 8rem 3rem;
+            background: var(--midnight-blue);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h3 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3rem;
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            background: var(--night-black);
+            border: 1px solid rgba(189, 0, 255, 0.2);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            border-color: var(--neon-violet);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(189, 0, 255, 0.2);
+        }
+        
+        .product-image {
+            height: 300px;
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.1), rgba(255, 0, 64, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--club-red);
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .product-info {
+            padding: 2rem;
+        }
+        
+        .product-name {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-specs {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-add {
+            flex: 1;
+            background: var(--neon-violet);
+            color: var(--ivory);
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-add:hover {
+            background: var(--club-red);
+        }
+        
+        /* AI Oracle Feature */
+        .oracle {
+            padding: 8rem 3rem;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(189, 0, 255, 0.1) 0%, transparent 50%),
+                var(--night-black);
+            text-align: center;
+        }
+        
+        .oracle-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .oracle-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .oracle h3 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3rem;
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+        }
+        
+        .oracle-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            background: rgba(10, 14, 39, 0.8);
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(189, 0, 255, 0.3);
+        }
+        
+        .oracle-input input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--ivory);
+            font-size: 1.1rem;
+            padding: 1rem;
+            outline: none;
+        }
+        
+        .oracle-input input::placeholder {
+            color: rgba(245, 245, 240, 0.5);
+        }
+        
+        .oracle-input button {
+            background: var(--neon-violet);
+            color: var(--ivory);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        /* Subscription Section */
+        .subscription {
+            padding: 8rem 3rem;
+            background: var(--midnight-blue);
+        }
+        
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .plan-card {
+            background: var(--night-black);
+            border: 2px solid transparent;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .plan-card.featured {
+            border-color: var(--neon-violet);
+            transform: scale(1.05);
+        }
+        
+        .plan-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--neon-violet);
+            padding: 0.5rem 1.5rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        .plan-name {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--neon-violet);
+            margin: 1.5rem 0;
+        }
+        
+        .plan-price span {
+            font-size: 1rem;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(245, 245, 240, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .plan-features li::before {
+            content: '✓';
+            color: var(--neon-violet);
+            font-weight: 700;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--night-black);
+            padding: 4rem 3rem 2rem;
+            border-top: 1px solid rgba(189, 0, 255, 0.2);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        
+        .footer-brand h4 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2rem;
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand p {
+            opacity: 0.7;
+            line-height: 1.8;
+            max-width: 300px;
+        }
+        
+        .footer-links h5 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--neon-violet);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--ivory);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--neon-violet);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 245, 240, 0.1);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        .age-disclaimer {
+            color: var(--club-red);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Age Gate -->
+    <div class="age-gate" id="ageGate">
+        <div class="age-gate-content">
+            <h1>Club Bump</h1>
+            <p class="tagline">Luxury Gets Weird After Midnight</p>
+            <p class="age-warning">🔞 MUST BE 18+</p>
+            <p style="margin-bottom: 2rem; opacity: 0.8;">This site contains age-restricted products.</p>
+            <div class="age-buttons">
+                <button class="btn-primary" onclick="enterSite()">I AM 18 OR OLDER — ENTER</button>
+                <button class="btn-secondary" onclick="exitSite()">I AM UNDER 18 — EXIT</button>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.5;">
+                By entering, you agree to our Terms and Privacy Policy.<br>
+                Age verification required for all purchases.
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Club Bump</div>
+        <ul class="nav-links">
+            <li><a href="#products">Caviar</a></li>
+            <li><a href="#oracle">Oracle</a></li>
+            <li><a href="#subscribe">Subscribe</a></li>
+            <li><a href="#venues">Venues</a></li>
+            <li><a href="/creators">Creators</a></li>
+        </ul>
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <a href="#" style="color: var(--ivory); font-size: 1.5rem;">🛒</a>
+            <a href="/account" style="color: var(--ivory); font-size: 1.5rem;">👤</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="live-badge">
+            <div class="live-dot"></div>
+            <span>LIVE NOW</span>
+            <span style="opacity: 0.8;">@nightlifelena</span>
+        </div>
+        
+        <div class="hero-content">
+            <h2>The Bump Before<br>The Afterparty</h2>
+            <p class="hero-subtitle">AI-CURATED CAVIAR FOR THE WILD ONES</p>
+            <p class="hero-description">
+                Farmed luxury caviar, delivered cold. Paired with Pringles. 
+                Blessed by the Afterparty Oracle. For those who keep the night alive.
+            </p>
+            <div class="hero-cta">
+                <button class="btn-primary btn-large">Shop The Drop</button>
+                <button class="btn-outline">Take The Oracle's Quiz</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="section-header">
+            <h3>The Collection</h3>
+            <p>Farmed sustainably. Harvested for chaos. Each tin blessed by the Oracle.</p>
+        </div>
+        
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge">Oracle's Pick</div>
+                    🐟
+                </div>
+                <div class="product-info">
+                    <h4 class="product-name">Osetra Gold</h4>
+                    <p class="product-specs">Russian Sturgeon • 30g • Buttery, Nutty</p>
+                    <p class="product-price">$89</p>
+                    <div class="product-actions">
+                        <button class="btn-add">Add to Cart</button>
+                        <button class="btn-secondary" style="padding: 1rem;">♡</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge" style="background: var(--neon-violet);">Live Price</div>
+                    🥚
+                </div>
+                <div class="product-info">
+                    <h4 class="product-name">Beluga Reserve</h4>
+                    <p class="product-specs">Beluga Sturgeon • 50g • Creamy, Mild</p>
+                    <p class="product-price">$149</p>
+                    <div class="product-actions">
+                        <button class="btn-add">Add to Cart</button>
+                        <button class="btn-secondary" style="padding: 1rem;">♡</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    🎭
+                </div>
+                <div class="product-info">
+                    <h4 class="product-name">The Pringles Pairing</h4>
+                    <p class="product-specs">Hackleback + 3 Pringles Flavors • Party Pack</p>
+                    <p class="product-price">$65</p>
+                    <div class="product-actions">
+                        <button class="btn-add">Add to Cart</button>
+                        <button class="btn-secondary" style="padding: 1rem;">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Oracle Section -->
+    <section class="oracle" id="oracle">
+        <div class="oracle-container">
+            <div class="oracle-icon">🔮</div>
+            <h3>Ask The Afterparty Oracle</h3>
+            <p style="font-size: 1.2rem; opacity: 0.8; max-width: 600px; margin: 0 auto 2rem;">
+                Tell us your plans. The Oracle predicts your perfect caviar match.
+                AI-curated based on your vibe, venue, and velocity of the night.
+            </p>
+            <div class="oracle-input">
+                <input type="text" placeholder="I'm going to a warehouse rave in Brooklyn...">
+                <button>Reveal</button>
+            </div>
+            <div style="margin-top: 2rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                <span style="opacity: 0.6; font-size: 0.9rem;">"F1 weekend in Miami"</span>
+                <span style="opacity: 0.6; font-size: 0.9rem;">"Dive bar birthday"</span>
+                <span style="opacity: 0.6; font-size: 0.9rem;">"Afterparty at my place"</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscription Section -->
+    <section class="subscription" id="subscribe">
+        <div class="section-header">
+            <h3>Join The Club</h3>
+            <p>Monthly rituals. Curated by AI. Delivered cold.</p>
+        </div>
+        
+        <div class="plan-grid">
+            <div class="plan-card">
+                <h4 class="plan-name">The Newcomer</h4>
+                <p style="opacity: 0.7;">For the curious</p>
+                <div class="plan-price">$99<span>/month</span></div>
+                <ul class="plan-features">
+                    <li>2 curated products monthly</li>
+                    <li>Pringles pairing included</li>
+                    <li>AI Oracle access</li>
+                    <li>Free shipping</li>
+                </ul>
+                <button class="btn-outline" style="width: 100%;">Start Ritual</button>
+            </div>
+            
+            <div class="plan-card featured">
+                <h4 class="plan-name">The Midnight Curator</h4>
+                <p style="opacity: 0.7;">For the committed</p>
+                <div class="plan-price">$179<span>/month</span></div>
+                <ul class="plan-features">
+                    <li>3-4 premium products</li>
+                    <li>Exclusive species access</li>
+                    <li>Live event priority</li>
+                    <li>Swap any item</li>
+                    <li>Venue partner perks</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%;">Join The Club</button>
+            </div>
+            
+            <div class="plan-card">
+                <h4 class="plan-name">Oracle Elite</h4>
+                <p style="opacity: 0.7;">For the obsessed</p>
+                <div class="plan-price">$349<span>/month</span></div>
+                <ul class="plan-features">
+                    <li>Custom curation</li>
+                    <li>Quarterly rare species</li>
+                    <li>Creator collab access</li>
+                    <li>Personal Oracle consult</li>
+                    <li>White glove delivery</li>
+                </ul>
+                <button class="btn-outline" style="width: 100%;">Apply</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h4>Club Bump</h4>
+                <p>Luxury gets weird after midnight. AI-curated caviar for the wild ones. 
+                   Farmed sustainably. Delivered cold. Blessed by the Oracle.</p>
+            </div>
+            <div class="footer-links">
+                <h5>Shop</h5>
+                <ul>
+                    <li><a href="#">All Caviar</a></li>
+                    <li><a href="#">Subscriptions</a></li>
+                    <li><a href="#">Pringles Pairings</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h5>Experience</h5>
+                <ul>
+                    <li><a href="#">The Oracle</a></li>
+                    <li><a href="#">Live Events</a></li>
+                    <li><a href="#">Venue Partners</a></li>
+                    <li><a href="#">Creators</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h5>Support</h5>
+                <ul>
+                    <li><a href="#">Age Verification</a></li>
+                    <li><a href="#">Shipping & Cold Chain</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Club Bump. All rights reserved.</p>
+            <p class="age-disclaimer">🔞 MUST BE 18+ TO PURCHASE • CAVIAR IS AN AGE-RESTRICTED PRODUCT</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem;">
+                <a href="#" style="color: var(--ivory);">Privacy Policy</a> • 
+                <a href="#" style="color: var(--ivory);">Terms of Service</a> • 
+                <a href="#" style="color: var(--ivory);">Do Not Sell My Information (CCPA)</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function enterSite() {
+            document.getElementById('ageGate').style.display = 'none';
+        }
+        
+        function exitSite() {
+            window.location.href = 'https://www.google.com';
+        }
+    </script>
+</body>
+</html>

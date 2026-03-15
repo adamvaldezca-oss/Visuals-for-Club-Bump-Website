@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Approval | Club Bump</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --midnight-blue: #0a0e27;
+            --neon-violet: #bd00ff;
+            --ivory: #f5f5f0;
+            --night-black: #050505;
+            --club-red: #ff0040;
+            --green: #00ff88;
+            --yellow: #ffcc00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--night-black);
+            color: var(--ivory);
+        }
+        
+        .header {
+            background: var(--midnight-blue);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(189, 0, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2rem;
+            color: var(--neon-violet);
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            height: calc(100vh - 80px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: rgba(10, 14, 39, 0.5);
+            border-right: 1px solid rgba(189, 0, 255, 0.2);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+        
+        .filter-tab.active {
+            background: var(--neon-violet);
+        }
+        
+        .content-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .content-item:hover, .content-item.selected {
+            border-color: var(--neon-violet);
+            background: rgba(189, 0, 255, 0.1);
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .platform-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .badge-tiktok { background: #000; }
+        .badge-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .badge-email { background: #1a73e8; }
+        
+        .ai-score {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .score-high { background: rgba(0, 255, 136, 0.2); color: var(--green); }
+        .score-medium { background: rgba(255, 204, 0, 0.2); color: var(--yellow); }
+        .score-low { background: rgba(255, 0, 64, 0.2); color: var(--club-red); }
+        
+        .content-preview {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            opacity: 0.9;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .content-meta {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+        
+        /* Main Panel */
+        .main {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .content-detail {
+            background: var(--midnight-blue);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .detail-header {
+            display: flex;
+            border-bottom: 1px solid rgba(189, 0, 255, 0.2);
+        }
+        
+        .detail-tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .detail-tab.active {
+            border-bottom-color: var(--neon-violet);
+            color: var(--neon-violet);
+        }
+        
+        .detail-body {
+            padding: 2rem;
+        }
+        
+        .content-textarea {
+            width: 100%;
+            min-height: 300px;
+            background: var(--night-black);
+            border: 1px solid rgba(189, 0, 255, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            color: var(--ivory);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            resize: vertical;
+        }
+        
+        .hashtag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .hashtag {
+            padding: 0.5rem 1rem;
+            background: rgba(189, 0, 255, 0.2);
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .hashtag.suggested {
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+        
+        .ai-insights {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .ai-insights h4 {
+            color: var(--neon-violet);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .confidence-meter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .meter-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--club-red), var(--yellow), var(--green));
+            border-radius: 4px;
+        }
+        
+        /* Actions */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(189, 0, 255, 0.2);
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-green {
+            background: var(--green);
+            color: var(--night-black);
+        }
+        
+        .btn-red {
+            background: var(--club-red);
+            color: var(--ivory);
+        }
+        
+        .btn-violet {
+            background: var(--neon-violet);
+            color: var(--ivory);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(245, 245, 240, 0.3);
+            color: var(--ivory);
+        }
+        
+        .action-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Variations Panel */
+        .variations {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .variation-card {
+            background: var(--night-black);
+            border: 1px solid rgba(189, 0, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .variation-card:hover {
+            border-color: var(--neon-violet);
+        }
+        
+        .variation-label {
+            font-size: 0.8rem;
+            color: var(--neon-violet);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🔮 Content Command Center</h1>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" style="color: var(--yellow);">12</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: var(--green);">48</div>
+                <div class="stat-label">Approved Today</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: var(--neon-violet);">89%</div>
+                <div class="stat-label">AI Confidence Avg</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="filter-tabs">
+                <div class="filter-tab active">All</div>
+                <div class="filter-tab">TikTok</div>
+                <div class="filter-tab">Instagram</div>
+                <div class="filter-tab">Email</div>
+            </div>
+            
+            <div class="content-item selected">
+                <div class="content-header">
+                    <span class="platform-badge badge-tiktok">TikTok</span>
+                    <span class="ai-score score-high">94% AI</span>
+                </div>
+                <div class="content-preview">
+                    POV: You're at a warehouse rave in Brooklyn and someone pulls out a tin of Osetra... 
+                    The night just got weird (in the best way). Here's how to do the bump 👇
+                </div>
+                <div class="content-meta">
+                    <span>🎵 trending audio</span>
+                    <span>•</span>
+                    <span>2 min ago</span>
+                </div>
+            </div>
+            
+            <div class="content-item">
+                <div class="content-header">
+                    <span class="platform-badge badge-instagram">Instagram</span>
+                    <span class="ai-score score-medium">76% AI</span>
+                </div>
+                <div class="content-preview">
+                    Full moon energy calls for full flavor. Tonight's ritual: Beluga Reserve, 
+                    Sour Cream & Onion Pringles, and absolutely zero regrets.
+                </div>
+                <div class="content-meta">
+                    <span>📸 carousel</span>
+                    <span>•</span>
+                    <span>15 min ago</span>
+                </div>
+            </div>
+            
+            <div class="content-item">
+                <div class="content-header">
+                    <span class="platform-badge badge-email">Email</span>
+                    <span class="ai-score score-high">91% AI</span>
+                </div>
+                <div class="content-preview">
+                    Your March box is being curated by the Oracle... Based on your vibe checks, 
+                    we're predicting a wild month. Here's what's coming.
+                </div>
+                <div class="content-meta">
+                    <span>📧 newsletter</span>
+                    <span>•</span>
+                    <span>1 hour ago</span>
+                </div>
+            </div>
+            
+            <div class="content-item">
+                <div class="content-header">
+                    <span class="platform-badge badge-tiktok">TikTok</span>
+                    <span class="ai-score score-low">62% AI</span>
+                </div>
+                <div class="content-preview">
+                    F1 weekend in Miami = Beluga on ice. Join us live Saturday 8PM as we 
+                    breakdown the perfect afterparty caviar setup. Link in bio.
+                </div>
+                <div class="content-meta">
+                    <span>🎥 live promo</span>
+                    <span>•</span>
+                    <span>2 hours ago</span>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Panel -->
+        <main class="main">
+            <div class="content-detail">
+                <div class="detail-header">
+                    <div class="detail-tab active">Preview</div>
+                    <div class="detail-tab">Variations</div>
+                    <div class="detail-tab">Metadata</div>
+                    <div class="detail-tab">History</div>
+                </div>
+                
+                <div class="detail-body">
+                    <textarea class="content-textarea">
+POV: You're at a warehouse rave in Brooklyn and someone pulls out a tin of Osetra... 
+
+The night just got weird (in the best way). 
+
+Here's how to do the bump:
+1. Spoon it on your hand (between thumb and index)
+2. Take a Pringle (Sour Cream & Onion is the move)
+3. Bump it together
+4. Taste the chaos
+
+Link in bio for the full ritual 🔮✨
+
+#caviarbump #afterparty #brooklyn #warehouseparty #luxuryweird #clubbump #osetra #pringles #latenight #tiktokmademebuyit #fyp #nightlife
+                    </textarea>
+                    
+                    <div class="hashtag-cloud">
+                        <span class="hashtag">#caviarbump</span>
+                        <span class="hashtag">#afterparty</span>
+                        <span class="hashtag">#brooklyn</span>
+                        <span class="hashtag">#warehouseparty</span>
+                        <span class="hashtag suggested">+#luxurylifestyle</span>
+                        <span class="hashtag suggested">+#tiktokfood</span>
+                        <span class="hashtag suggested">+#nycnightlife</span>
+                    </div>
+                    
+                    <div class="ai-insights">
+                        <h4>🤖 AI Insights</h4>
+                        <div class="insight-item">
+                            <span>🎯</span>
+                            <span><strong>Trending alignment:</strong> 94% match with current "POV" format trends</span>
+                        </div>
+                        <div class="insight-item">
+                            <span>🎵</span>
+                            <span><strong>Audio suggestion:</strong> "original sound - luxury lifestyle" (trending +12%)</span>
+                        </div>
+                        <div class="insight-item">
+                            <span>⏱️</span>
+                            <span><strong>Estimated engagement:</strong> 45-60s optimal watch time</span>
+                        </div>
+                        <div class="insight-item">
+                            <span>🎭</span>
+                            <span><strong>Brand voice:</strong> On-brand "luxury gets weird" tone detected</span>
+                        </div>
+                        
+                        <div class="confidence-meter">
+                            <span style="font-size: 0.85rem; font-weight: 600;">AI Confidence</span>
+                            <div class="meter-bar">
+                                <div class="meter-fill" style="width: 94%;"></div>
+                            </div>
+                            <span style="font-weight: 800; color: var(--green);">94%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-outline">Request Changes</button>
+                    <div class="action-group">
+                        <button class="btn btn-red">Reject</button>
+                        <button class="btn btn-green">Approve & Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
